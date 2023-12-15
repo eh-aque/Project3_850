@@ -32,7 +32,7 @@ cv2.drawContours(image=contour_img, contours=[max(contours, key = cv2.contourAre
 # Bitwise-AND contour image and original image
 masked_img = cv2.bitwise_and(contour_img,  motherboard_img)
 
-print(len(contours), "objects were found in this image.")
+print(len(contours), "objects found.")
 
 # Save the result
 cv2.imwrite('./Desktop/TMU Y4/S1/AER850 - Intro to Machine Learning/Project 3/motherboard_output.jpeg', masked_img)
