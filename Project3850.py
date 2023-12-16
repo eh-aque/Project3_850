@@ -4,6 +4,8 @@ import numpy as np
 import torch
 from PIL import Image
 
+# Step 1: Object Masking
+# ----------------------------------------------
 # Load the image
 motherboard_img = cv2.imread('./Desktop/TMU Y4/S1/AER850 - Intro to Machine Learning/Project 3/motherboard_image.JPEG', cv2.IMREAD_COLOR)
 
@@ -11,7 +13,7 @@ motherboard_img = cv2.imread('./Desktop/TMU Y4/S1/AER850 - Intro to Machine Lear
 motherboard_img_gray = cv2.cvtColor(motherboard_img, cv2.COLOR_RGB2GRAY)
 
 # Apply Gaussian blur
-motherboard_img_gray = cv2.GaussianBlur(motherboard_img_gray, (47, 47), 4)
+motherboard_img_gray = cv2.GaussianBlur(motherboard_img_gray, (45, 45), 4)
 
 # Apply adaptive thresholding
 motherboard_img_gray = cv2.adaptiveThreshold(motherboard_img_gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 55, 5)
@@ -32,20 +34,28 @@ cv2.drawContours(image=contour_img, contours=[max(contours, key = cv2.contourAre
 # Bitwise-AND contour image and original image
 masked_img = cv2.bitwise_and(contour_img,  motherboard_img)
 
-print(len(contours), "objects found.")
-
 # Save the result
 cv2.imwrite('./Desktop/TMU Y4/S1/AER850 - Intro to Machine Learning/Project 3/motherboard_output.jpeg', masked_img)
+# ----------------------------------------------
+
+
+
+# # Step 2: YOLOv8 Training
+# # ----------------------------------------------
+# from ultralytics import YOLO
 
 # # Load the YOLOv8 model
 # model = torch.hub.load('ultralytics/yolov8', 'yolov8_nano')
 
 # # Train the model
-# model.train('path_to_your_dataset', epochs=200, batch_size=16, imgsz=900)
+# model.train('./Desktop/TMU Y4/S1/AER850 - Intro to Machine Learning/Project 3/data/train', epochs=200, batch_size=16, imgsz=900, name='my_model')
 
-# # Evaluate the model
-# for image_path in ['image1.png', 'image2.png', 'image3.png']:
-#     img = Image.open(image_path)
-#     results = model.predict(img)
-#     results.print()  # print results to stdout
-#     results.show()  # display results
+# # Save the model
+# torch.save(model.state_dict(), 'Desktop/TMU Y4/S1/AER850 - Intro to Machine Learning/Project 3/my_model.pth')
+
+# # # Evaluate the model
+# # for image_path in ['image1.png', 'image2.png', 'image3.png']:
+# #     img = Image.open(image_path)
+# #     results = model.predict(img)
+# #     results.print()  # print results to stdout
+# #     results.show()  # display results
