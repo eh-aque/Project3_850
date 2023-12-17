@@ -7,7 +7,7 @@ from PIL import Image
 # Step 1: Object Masking
 # ----------------------------------------------
 # Load the image
-motherboard_img = cv2.imread('./Desktop/TMU Y4/S1/AER850 - Intro to Machine Learning/Project 3/motherboard_image.JPEG', cv2.IMREAD_COLOR)
+motherboard_img = cv2.imread('motherboard_image.JPEG', cv2.IMREAD_COLOR)
 
 # Convert the image to grayscale
 motherboard_img_gray = cv2.cvtColor(motherboard_img, cv2.COLOR_RGB2GRAY)
@@ -22,6 +22,8 @@ motherboard_img_gray = cv2.adaptiveThreshold(motherboard_img_gray, 255, cv2.ADAP
 edges = cv2.Canny(motherboard_img_gray, 1, 1)
 edges = cv2.dilate(edges,None, iterations = 7)
 
+cv2.imwrite('motherboard_edge.jpeg', edges)
+
 # Find contours
 contours, _ = cv2.findContours(image=edges, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE)
 
@@ -31,11 +33,15 @@ contour_img = np.zeros_like(motherboard_img)
 # Draw the largest contour on the image
 cv2.drawContours(image=contour_img, contours=[max(contours, key = cv2.contourArea)], contourIdx=-1, color=(255, 255, 255), thickness=cv2.FILLED)
 
+cv2.imwrite('motherboard_contour.jpeg', contour_img)
+
 # Bitwise-AND contour image and original image
 masked_img = cv2.bitwise_and(contour_img,  motherboard_img)
 
 # Save the result
-cv2.imwrite('./Desktop/TMU Y4/S1/AER850 - Intro to Machine Learning/Project 3/motherboard_output.jpeg', masked_img)
+cv2.imwrite('motherboard_output.jpeg', masked_img)
+
+
 # ----------------------------------------------
 
 
